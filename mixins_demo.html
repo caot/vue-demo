@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My first Vue app</title>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+
+  <!--script src="https://unpkg.com/vue"></script-->
+  <!-- development version, includes helpful console warnings -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+  <!-- production version, optimized for size and speed -->
+  <!--script src="https://cdn.jsdelivr.net/npm/vue"></script-->
+</head>
+<body>
+  <div id="app">
+    <div>{{ message }}</div>
+    <div>{{ $data.message }}</div>
+    <div>{{ $data.thisv }}</div>
+    <div>{{ thisv }}</div>
+    <div>{{ $data.thisv === thisv }}</div>
+  </div>
+
+  <script>
+  // define a mixin object
+  var myMixin = {
+    created: function () {
+      console.log(this)
+      this.hello()
+      this.message = this.hello();
+    },
+    methods: {
+      hello: function () {
+        msg = 'hello from mixin!'
+        console.log(msg)
+        return msg;
+      }
+    }
+  }
+
+  // define a component that uses this mixin
+  var Component = Vue.extend({
+    mixins: [myMixin]
+  })
+
+  const component = new Component({
+    el: '#app',
+    data: {
+      message: 'default message',
+      _this: this,
+      thisv: this
+    }
+  }) // => "hello from mixin!"
+
+  console.log('component', component)                 // hello from mixin!
+  console.log('component.message', component.message) // hello from mixin!
+  console.log('component.data', component.data)       // undefined
+  console.log('component.$data', component.$data)     // Object { message: Getter, _this: Getter, thisv: Getter, 1 more… }
+
+  </script>
+</body>
+</html>
