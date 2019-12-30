@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My first Vue app</title>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/base.css" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+  <p>reference:
+    <ul>
+    <li><a href="https://forum.vuejs.org/t/components-v-model-too-much-code/6282">Components + v-model - Too much code?</a></li>
+    <li><a href="https://jsfiddle.net/davestewart/ug6wnf7z/">https://jsfiddle.net/davestewart/ug6wnf7z/</a></li>
+    </ul>
+  </p>
+
+  <div id="app">
+    <section>
+      <h1>Components</h1>
+
+      <article>
+      <h2>Simple</h2>
+      <ui-input v-model="foo" label="Foo"></ui-input>
+      <button @click="foo = Math.random()">Update foo</button>
+      </article>
+
+      <article>
+      <h2>Select</h2>
+      <ui-select v-model="bar" label="Bar" options="Foo:1|Bar:2|Baz:3"></ui-select>
+      <button @click="bar = 2">Update bar</button>
+      </article>
+
+      <article>
+      <h2>Checkboxes</h2>
+      <ui-checkboxes v-model="baz" label="Baz" options="Foo:1|Bar:2|Baz:3"></ui-checkboxes>
+      <button @click="baz = ['1', '3']">Update baz</button>
+      </article>
+    </section>
+
+    <pre>{{ $data }}</pre>
+
+  </div>
+
+  <template id="input">
+    <div class="ui ui-input">
+      <label>{{ label }} <input type="text" v-model="input" @input="onInput"></label>
+    </div>
+  </template>
+
+  <template id="select">
+    <div class="ui ui-select">
+      <label>{{ label }} <select v-model="input" @change="onInput">
+      <option v-for="option in _options" :value="option.value">{{ option.label }}</option>
+      </select></label>
+    </div>
+  </template>
+
+  <template id="checkboxes">
+    <div class="ui ui-checkboxes">
+      <div>
+      <label v-for="option in _options">
+      <input type="checkbox"
+        :value="option.value"
+        v-model="input"
+        @change="onInput">
+        {{ option.label }}
+      </label>
+      </div>
+    </div>
+  </template>
+
+
+  <script>
+
+const UiField = {
+
+  props: {
+    value: [String, Number],
+    label: String,
+  },
+
+  data () {
+    // keep track of user input
+    return {
+      input: this.value
+    }
+  },
+
+  computed: {
+     // output allows input to be processed before sending out
+    output () {
+      log('Sanitising input', this.input)
+      return this.input
+    }
+  },
+
+  watch: {
+    // watch allows prop value to be checked before updating
+    value (value) {
+      if (value !== this.input) {
+        log('Updating value', value)
+        this.input = value
+      }
+    }
+  },
+
+  methods: {
+    onInput () {
+      log('Emitting output', this.output)
+      this.$emit('input', this.output)
+    }
+  }
+}
+
+const UiOptions = {
+  props: {
+    options: [Array, String]
+  },
+
+  computed: {
+    // computed _options allows you to sanitise props input
+    _options () {
+      // parse strings into an array of label:value pairs
+      return typeof this.options === 'string'
+        ? this.options
+          .split('|')
+          .map(pair => pair.split(':'))
+          .map(([label, value]) => ({label, value}))
+        : this.options
+    }
+  }
+}
+
+Vue.component('ui-input', {
+  template:'#input',
+  extends: UiField,
+  methods: {
+    // debounce text inputs only
+    onInput: _.debounce(UiField.methods.onInput, 250)
+  }
+})
+
+Vue.component('ui-select', {
+  template:'#select',
+  extends: UiField,
+  mixins: [UiOptions],
+})
+
+Vue.component('ui-checkboxes', {
+  template:'#checkboxes',
+  extends: UiField,
+  mixins: [UiOptions],
+  props: {
+    value: Array
+  }
+})
+
+function log(label, value) {
+  console.log(`${label} "${value}"`)
+}
+
+new Vue({
+  el: '#app',
+  data: {
+    foo: 'Hello',
+    bar: "1",
+    baz: [],
+  },
+})
+
+
+  </script>
+</body>
+</html>
