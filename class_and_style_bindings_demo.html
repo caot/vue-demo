@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My first Vue app</title>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+
+  <script src="vue.js"></script>
+</head>
+<body>
+  <p>Reference: <a target="blank" href="https://vuejs.org/v2/guide/class-and-style.html">https://vuejs.org/v2/guide/class-and-style.html</a></p>
+ 
+  <div id="app">
+    <div
+      class="static"
+      v-bind:class="{ active: isActive, 'text-danger': hasError }">X</div>
+
+    <div v-bind:class="classObject">Y</div>
+  </div>
+
+  <script>
+  var Component = Vue.extend({
+  })
+
+  const component = new Component({
+    el: '#app',
+    data: {
+      isActive: true,
+      hasError: false,
+
+      classObject: {
+        active: true,
+        'text-danger': true
+      }
+    },
+  })
+
+  console.log(component.$el.innerHTML); // It will render: <div class="static active"></div>
+  </script>
+</body>
+</html>
