@@ -1,60 +1,71 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>My first Vue app</title>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
+
 <body>
-    <p>reference:
-      <ul>
-        <li><a href="https://forum.vuejs.org/t/components-v-model-too-much-code/6282">Components + v-model - Too much code?</a></li>
-        <li><a href="https://jsfiddle.net/Herteby/bv1abyk4/">https://jsfiddle.net/Herteby/bv1abyk4/</a></li>
-      </ul>
-    </p>
+  <p>reference:
+  <ul>
+    <li><a href="https://forum.vuejs.org/t/components-v-model-too-much-code/6282">Components + v-model - Too much
+        code?</a></li>
+    <li><a href="https://jsfiddle.net/Herteby/bv1abyk4/">https://jsfiddle.net/Herteby/bv1abyk4/</a></li>
+  </ul>
+  </p>
 
-    <div id="vue">
-      <checkbox v-model="stuff" value="woot"></checkbox>
-      <checkbox v-model="stuff" value="hello"></checkbox>
-      <checkbox v-model="stuff" value="test"></checkbox>
-      {{stuff}}
-      <hr>
-      <checkbox v-model="bool"></checkbox>{{bool}}
-    </div>
+  <div id="vue">
+    <checkbox v-model="stuff" value="woot"></checkbox>
+    <checkbox v-model="stuff" value="hello"></checkbox>
+    <checkbox v-model="stuff" value="test"></checkbox>
+    {{stuff}}
+    <hr>
+    <checkbox v-model="bool"></checkbox>{{bool}}
+  </div>
 
-  <script>
-new Vue({
-  el:'#vue',
-  data:{
-  stuff:[],
-  bool:false
-  },
-  components:{
-    checkbox:{
-      props:['checked','value'],
-      model: {
-        prop: 'checked',
-        event: 'input'
-      },
-      template:`
-        <button v-if="Array.isArray(checked)" @click="click">{{checked.includes(value) ? 'X' : 'O'}}</button>
-        <button v-else @click="$emit('input', !checked)">{{checked ? 'X' : 'O'}}</button>
-        `,
-      methods:{
-        click(){
-          let checked = [].concat(this.checked)
-          if(checked.includes(this.value)){
-            checked.splice(checked.indexOf(this.value), 1)
-          } else {
-            checked.push(this.value)
+</body>
+
+<script type="text/x-template" id="id-buttons-template">
+  <button v-if="Array.isArray(checked)" @click="click">{{checked.includes(value) ? 'X' : 'O'}}</button>
+  <button v-else @click="$emit('input', !checked)">{{checked ? 'X' : 'O'}}</button>
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+  new Vue({
+    el: '#vue',
+    data: {
+      stuff: [],
+      bool: false
+    },
+    components: {
+      checkbox: {
+        props: ['checked', 'value'],
+        model: {
+          prop: 'checked',
+          event: 'input'
+        },
+        // template: `
+        //   <button v-if="Array.isArray(checked)" @click="click">{{checked.includes(value) ? 'X' : 'O'}}</button>
+        //   <button v-else @click="$emit('input', !checked)">{{checked ? 'X' : 'O'}}</button>
+        //   `,
+        template: '#id-buttons-template',
+        methods: {
+          click() {
+            let checked = [].concat(this.checked)
+            if (checked.includes(this.value)) {
+              checked.splice(checked.indexOf(this.value), 1)
+            } else {
+              checked.push(this.value)
+            }
+            this.$emit('input', checked)
           }
-          this.$emit('input',checked)
         }
       }
     }
-  }
-})
-  </script>
-</body>
+  })
+</script>
+
 </html>

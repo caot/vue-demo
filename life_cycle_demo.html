@@ -5,10 +5,15 @@
   <title>My first Vue app</title>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 
 <body>
   <div id="app">
+    <p>{{ email }}</p>
+    <input v-model='email' :class="{red: email.length<4}" @keyup.enter="hello">
+    <button onclick="alert('signed up')" :disabled="email.length<4">Submit</button>
+
     <div>{{ message }}</div>
     <div>{{ $data.message }}</div>
     <div>{{ $data.thisv }}</div>
@@ -17,12 +22,6 @@
   </div>
 </body>
 
-<!--script src="https://unpkg.com/vue"></script-->
-<!-- development version, includes helpful console warnings -->
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
-<!-- production version, optimized for size and speed -->
-<!--script src="https://cdn.jsdelivr.net/npm/vue"></script-->
 <script>
   // define a mixin object
   var myMixin = {
@@ -37,6 +36,24 @@
         console.log(msg)
         return msg;
       }
+    },
+    filter: {
+
+    },
+    computed: {
+
+    },
+    created: function () {
+      console.log('created')
+    },
+    mounted: function () {
+      console.log('mounted')
+    },
+    updated: function () {
+      console.log('updated')
+    },
+    destroyed: function () {
+      console.log('destroyed')
     }
   }
 
@@ -49,6 +66,7 @@
     el: '#app',
     data: {
       message: 'default message',
+      email: '',
       _this: this,
       thisv: this
     }
