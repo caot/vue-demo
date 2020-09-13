@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <a href="https://masteringjs.io/tutorials/vue/emit" target='_blank'> source code </a>
+
+  <div id="app">
+    <h1>{{ message }}</h1>
+    All Vue instances have a $emit() function, including both top-level apps and individual components.
+    <p>called: {{ called }}</p>
+  </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+<script>
+  let called = 0;
+
+  const app = new Vue({
+    el: '#app',
+    // template: '<div>default!</div>', // <==
+    data: {
+      message: '$emit() function',
+      called: called
+    }
+  });
+
+  app.$on('test-event', () => { ++called; });
+
+  app.$emit('test-event');
+
+  app.called = called;
+
+  console.log(['called:', called]);
+
+  console.log(app.message);
+  console.log(app._data);
+</script>
+
+</html>

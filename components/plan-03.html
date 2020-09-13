@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<body>
+  <a href="https://vueschool.io/lessons/global-vs-local-components" target='_blank'> reference </a>
+
+  <div id="app">
+    <h1>{{ message }}</h1>
+
+    <plan-picker></plan-picker>
+  </div>
+</body>
+
+<script type="text/x-tempalte" id='id-plan-picker-template'>
+  <div class='plans'>
+    <plan v-for='plan in plans' :name='plan' ></plan>
+  </div>
+</script>
+
+<script type="text/x-tempalte" id='id-plan-template'>
+  <div class="plan">
+    <div class='description'>
+      <span class='title'>
+        {{name}}
+      </span>
+    </div>
+  </div>
+</script>
+
+<script>
+  let PlanComponent = {
+    // props: ['name', 'palns'], // <==
+    props: {
+      name: String,
+      price: Number,
+      palns: Array
+    }, // <==
+    template: '#id-plan-template'
+  }
+
+  let PlanPickerComponent = {
+    template: '#id-plan-picker-template',
+    components: {
+      plan: PlanComponent,
+    },
+    data() {
+      return {
+        plans: ['The hacker', 'The Curious', 'global vs local components'],
+      }
+    }
+  }
+
+  var app = new Vue({
+    el: '#app',
+    components: {
+      'plan-picker': PlanPickerComponent,
+    },
+    data() {
+      return {
+        message: 'demo global vs local components'
+      }
+    }
+  })
+
+</script>
+
+</html>

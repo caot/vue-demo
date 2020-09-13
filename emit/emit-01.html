@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <a href="https://masteringjs.io/tutorials/vue/emit" target='_blank'> source code </a>
+
+  <div id="app">
+    <h1>{{ message }}</h1>
+    Vue components have a $emit() function that allows you to pass custom events up the component tree.
+  </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+<script>
+  Vue.component('my-component', {
+    mounted: function () {
+      // `$emit()` sends an event up the component tree. The parent
+      // can listen for the 'notify' event using 'v-on:notify'
+      this.$emit('notify');
+    },
+    template: '<div></div>'
+  });
+
+  const app = new Vue({
+    el: '#app',
+    data: () => ({ show: false }),
+    // Vue evaluates the expression in 'v-on:notify' when it gets a 'notify'
+    // event.
+    template: `
+    <div>
+      <my-component v-on:notify="show = true"></my-component>
+      <div v-if="show">Notified</div>
+    </div>
+  `
+  });
+</script>
+
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>ß
+
+<body>
+  <div id="root">
+    <h1>{{ message }}</h1>
+
+    <cat-list v-for='cat in cats' v-bind:cat='cat'></cat-list>
+  </div>
+</body>
+
+<script>
+  Vue.component('cat-list', {
+    props: ['cat'], // <==
+    template: '<div>{{ cat }}</div>'
+  })
+
+  var app = new Vue({
+    el: '#root',
+    component: ['cat-list'],
+    data: {
+      cats: [
+        { name: 'cat 1' },
+        { name: 'cat 2' },
+        { name: 'cat 3' }
+      ],
+      message: 'It\'s a messgae',
+    }
+  })
+
+</script>
+
+</html>

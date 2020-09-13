@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<header>
+  <meta charset="utf-8" />
+</header>
+
+<body>
+  <a href="https://masteringjs.io/tutorials/vue/emit" target='_blank'> source code </a>
+
+  <p>The way to do this is for input-name to $emit() an event called 'update' when the user clicks the 'Update' button,
+    with the new name.</p>
+
+  <div id="content">
+    default
+  </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+<script type="text/x-tempalte" id='id-tempalte-input'>
+  <div>
+    <input type="text" v-model="name">
+    <button v-on:click="$emit('update', name)">
+      Update
+    </button>
+  </div>
+</script>
+
+<script type="text/x-tempalte" id='id-tempalte-app'>
+  <div>
+    <div>
+      <input-name v-on:update="setName($event)"></input-name>
+    </div>
+    <h1>Hello, {{name}}</h1>
+  </div>
+</script>
+
+<script>
+
+  Vue.component('input-name', {
+    data: () => ({ name: 'World' }),
+    // When you click the "Update" button, Vue will emit an event `update`
+    // to the parent, with the current state of 'name'.
+    template: `#id-tempalte-input`
+  });
+
+  const app = new Vue({
+    data: () => ({ name: 'World' }),
+    // To listen to the 'update' event, you create the `input-name`
+    // component with a `v-on:update` attribute. `$event` contains
+    // the value of the 2nd parameter to `$emit()`.
+    template: `#id-tempalte-app`,
+    methods: {
+      // Define a method that Vue will call to handle the 'update' event.
+      setName: function (v) {
+        this.name = v;
+      }
+    }
+  });
+
+  app.$mount('#content');
+</script>
+
+</html>

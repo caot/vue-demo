@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+  <div id="app">
+    <h1>{{ message }}</h1>
+
+    <click-counter></click-counter>
+    <click-counter></click-counter>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+<script>
+  Vue.component('click-counter', {
+    props: ['message'],
+    template: '<button @click="count++">{{count}}</button>',
+    data() {
+      return {
+        count: 0
+      }
+    }
+  })
+
+  var app = new Vue({
+    el: '#app',
+    // component: ['cat-list'],
+    data: {
+      message: 'demo counter 01',
+    }
+  })
+
+</script>
+
+</html>

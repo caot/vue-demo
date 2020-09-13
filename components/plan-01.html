@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<body>
+  <a href="https://vueschool.io/lessons/reusable-components-with-props" target='_blank'> reference </a>
+
+  <div id="app">
+    <h1>{{ message }}</h1>
+
+    <div class='plans'>
+      <plan name='The hacker'></plan>
+      <plan name='The Curious'></plan>
+
+      <div>----- v-for --------</div>
+      <plan v-for='plan in plans' name='plan' ></plan>
+
+      <div>----- bind var--------</div>
+      <plan v-for='plan in plans' :name='plan' ></plan>
+    </div>
+  </div>
+</body>
+<script type="text/x-tempalte" id='id-plan-template'>
+  <div class="plan">
+    <div class='description'>
+      <span class='title'>
+        {{name}}
+      </span>
+    </div>
+  </div>
+</script>
+
+<script>
+  Vue.component('plan', {
+    // props: ['name', 'palns'], // <==
+    props: {
+      name: String,
+      price: Number,
+      palns: Array
+    }, // <==
+    template: '#id-plan-template'
+  })
+
+  var app = new Vue({
+    el: '#app',
+    data: {
+      message: 'demo components with props',
+      plans: ['The hacker', 'The Curious']
+    }
+  })
+
+</script>
+</html>

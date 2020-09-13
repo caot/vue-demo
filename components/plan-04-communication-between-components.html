@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<!--script src="https://cdn.jsdelivr.net/npm/vue></script-->
+<!--script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script-->
+<!--script src="vue-2.5.22/dist/vue.js"></script-->
+
+<body>
+  <a href="https://github.com/caot/vuejs-components-fundamentals/blob/master/plan-picker/index.html" target='_blank'>
+    source code </a>
+  | <a href="https://vueschool.io/lessons/communication-between-components" target='_blank'> reference </a>
+
+  <div id="app" class="container mx-auto py-6">
+    <h1>{{ message }}</h1>
+    <div class="content">
+      <h1 class="title">Plans</h1>
+
+      <plan-picker></plan-picker>
+    </div>
+  </div>
+
+
+</body>
+<script type="text/x-tempalte" id='id-plan-picker-template'>
+  <div class='plans'>
+    <plan v-for='plan in plans' :name='plan' :key="plan.id" ></plan>
+  </div>
+</script>
+
+
+<script type="text/x-tempalte" id='id-plan-template'>
+  <div @click='select' class="plan">
+    <div class='description'>
+      <span class='title'>
+        {{name}}
+      </span>
+    </div>
+  </div>
+</script>
+
+<script src="../vue-2.5.22/dist/vue.js"></script>
+<script>
+  // https://github.com/caot/vuejs-components-fundamentals/blob/master/plan-picker/app.js
+  let PlanComponent = {
+    template: '#id-plan-template',
+    props: {
+      name: {
+        type: String,
+        required: true
+      },
+      selectedPlan: {
+        type: String
+      }
+    },
+    data() {
+      return {
+        selected: false
+      }
+    },
+    computed: {
+      isSelected() {
+        return this.name === this.selectedPlan
+      }
+    },
+    methods: {
+      select() {
+        //  $emit() function that allows you to pass custom events up the component tree.
+        //  https://masteringjs.io/tutorials/vue/emit
+        this.$emit('select', this.name)
+        this.selected = true
+      }
+    }
+  }
+
+  let PlanPickerComponent = {
+    template: '#id-plan-picker-template',
+    components: {
+      plan: PlanComponent,
+    },
+    data() {
+      return {
+        plans: ['The hacker', 'The Curious', 'global vs local components'],
+        selectedPlan: null
+      }
+    },
+    methods: {
+      selectPlan(plan) {
+        this.selectedPlan = plan
+      }
+    }
+  }
+
+  var app = new Vue({
+    el: '#app',
+    props: ['name'],
+    components: {
+      'plan-picker': PlanPickerComponent,
+    },
+    data() {
+      return {
+        message: 'demo global vs local components'
+      }
+    }
+  })
+
+</script>
+<link rel="stylesheet" href="../style.css">
+
+</html>
